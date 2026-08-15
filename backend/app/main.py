@@ -1,16 +1,26 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.core.config import CORS_ORIGINS
 
+from app.core.config import CORS_ORIGINS
 from app.db.database import Base, engine
 
-# Database models
+# ============================================================
+# DATABASE MODELS
+# ============================================================
+
 from app.db.models.user import User
 from app.db.models.ticket import Ticket
 from app.db.models.ticket_comment import TicketComment
 from app.db.models.ticket_activity import TicketActivity
+from app.db.models.resolution_attempt import ResolutionAttempt
+from app.db.models.resolution_proof import ResolutionProof
+from app.db.models.knowledge_item import KnowledgeItem
 
-# API routers
+
+# ============================================================
+# API ROUTERS
+# ============================================================
+
 from app.api.routes.auth import router as auth_router
 from app.api.routes.users import router as users_router
 from app.api.routes.tickets import router as ticket_router
@@ -19,38 +29,43 @@ from app.api.routes.ai import router as ai_router
 from app.api.routes.comments import router as comments_router
 from app.api.routes.activity import router as activity_router
 from app.api.routes.dashboard import router as dashboard_router
+from app.api.routes.knowledge import router as knowledge_router
 
 
-# Create database tables
+# ============================================================
+# DATABASE INITIALIZATION
+# ============================================================
+
 Base.metadata.create_all(bind=engine)
 
 
-# FastAPI application
+# ============================================================
+# FASTAPI APPLICATION
+# ============================================================
+
 app = FastAPI(
     title="SupportSakhi AI",
     description="AI-powered real-world support platform",
-    version="1.0.0"
+    version="1.0.0",
 )
 
 
-# -----------------------------------
-# CORS Configuration
-# -----------------------------------
-
-origins = CORS_ORIGINS
+# ============================================================
+# CORS CONFIGURATION
+# ============================================================
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 
-# -----------------------------------
-# Register API Routers
-# -----------------------------------
+# ============================================================
+# REGISTER API ROUTERS
+# ============================================================
 
 app.include_router(auth_router)
 app.include_router(users_router)
@@ -60,28 +75,35 @@ app.include_router(ai_router)
 app.include_router(comments_router)
 app.include_router(activity_router)
 app.include_router(dashboard_router)
+app.include_router(knowledge_router)
 
 
-# -----------------------------------
-# Root API
-# -----------------------------------
+# ============================================================
+# ROOT API
+# ============================================================
 
 @app.get("/")
 def root():
     return {
         "message": "Welcome to SupportSakhi AI",
         "status": "running",
-        "version": "1.0.0"
+        "version": "1.0.0",
     }
 
 
-# -----------------------------------
-# Health Check API
-# -----------------------------------
+# ============================================================
+# HEALTH CHECK API
+# ============================================================
 
 @app.get("/health")
 def health():
     return {
         "status": "healthy",
-        "service": "SupportSakhi AI"
+        "service": "SupportSakhi AI",
+        "features": {
+            "smart_memory": True,
+            "proof_of_resolution": True,
+            "multi_agent_verification": True,
+            "knowledge_base": True,
+        },
     }

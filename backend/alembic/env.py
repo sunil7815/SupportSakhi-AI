@@ -9,7 +9,9 @@ import app.db.models.user
 import app.db.models.ticket
 import app.db.models.ticket_activity
 import app.db.models.ticket_comment
-
+import app.db.models.resolution_attempt
+import app.db.models.resolution_proof
+import app.db.models.knowledge_item
 
 config = context.config
 
