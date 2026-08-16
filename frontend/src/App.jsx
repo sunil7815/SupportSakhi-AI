@@ -17,14 +17,13 @@ import CreateTicket from "./pages/CreateTicket";
 import TicketDetails from "./pages/TicketDetails";
 import AdminDashboard from "./pages/AdminDashboard";
 import AIChat from "./pages/AIChat";
-
+import KnowledgeAdmin from "./pages/KnowledgeAdmin";
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
         <Routes>
-
           <Route
             path="/"
             element={
@@ -52,7 +51,6 @@ function App() {
               </ProtectedRoute>
             }
           >
-
             <Route
               path="/dashboard"
               element={<Dashboard />}
@@ -79,10 +77,14 @@ function App() {
             />
 
             <Route
+              path="/knowledge-admin"
+              element={<KnowledgeAdmin />}
+            />
+
+            <Route
               path="/admin"
               element={<AdminDashboard />}
             />
-
           </Route>
 
           <Route
@@ -94,12 +96,10 @@ function App() {
               />
             }
           />
-
         </Routes>
       </AuthProvider>
     </BrowserRouter>
   );
 }
-
 
 export default App;
