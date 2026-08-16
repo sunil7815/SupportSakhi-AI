@@ -1,4 +1,4 @@
-* {
+﻿* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -2004,3 +2004,828 @@ a {
   color: #344054;
 }
 
+/* =========================================================
+   SUPPORTSAKHI AI CHAT â€” ADVANCED FEATURES PART 2
+   Typing â€¢ Timeline â€¢ Scores â€¢ RAG â€¢ Autonomy â€¢ Copy
+========================================================= */
+
+
+/* =========================================================
+   LIVE AI STATUS
+========================================================= */
+
+.ai-live-status-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+
+  margin-top: 16px;
+}
+
+.ai-live-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  padding: 6px 10px;
+
+  border-radius: 999px;
+
+  color: #475569;
+  background: rgba(255, 255, 255, 0.72);
+
+  border: 1px solid #e2e8f0;
+
+  font-size: 0.69rem;
+  font-weight: 700;
+
+  backdrop-filter: blur(8px);
+}
+
+.ai-live-chip.online {
+  color: #166534;
+
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+.ai-live-dot {
+  width: 7px;
+  height: 7px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: #94a3b8;
+}
+
+.ai-live-chip.online .ai-live-dot {
+  background: #22c55e;
+
+  box-shadow:
+    0 0 0 4px
+    rgba(34, 197, 94, 0.12);
+
+  animation:
+    liveStatusPulse
+    1.8s ease-in-out infinite;
+}
+
+@keyframes liveStatusPulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.6;
+    transform: scale(1.22);
+  }
+}
+
+
+/* =========================================================
+   MESSAGE METADATA
+========================================================= */
+
+.ai-message-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 16px;
+
+  margin-bottom: 4px;
+}
+
+.ai-message-time {
+  font-size: 0.63rem;
+  opacity: 0.62;
+}
+
+.ai-message-user .ai-message-time {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.ai-message-assistant .ai-message-time {
+  color: #64748b;
+}
+
+
+/* =========================================================
+   AI PROCESSING LABEL
+========================================================= */
+
+.ai-processing-label {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 3px 7px;
+
+  border-radius: 999px;
+
+  background: #eef2ff;
+  color: #4f46e5;
+
+  font-size: 0.61rem;
+  font-weight: 800;
+
+  letter-spacing: 0.03em;
+}
+
+
+/* =========================================================
+   LIVE TYPING INDICATOR
+========================================================= */
+
+.ai-typing-message {
+  min-width: 260px;
+}
+
+.ai-typing-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  gap: 5px;
+
+  margin-top: 8px;
+}
+
+.ai-typing-row > span {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #6366f1;
+
+  animation:
+    supportTypingDot
+    1.2s ease-in-out infinite;
+}
+
+.ai-typing-row > span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.ai-typing-row > span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.ai-typing-row small {
+  width: 100%;
+
+  margin-top: 5px;
+
+  color: #64748b;
+
+  font-size: 0.68rem;
+  line-height: 1.4;
+}
+
+@keyframes supportTypingDot {
+  0%,
+  60%,
+  100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+
+  30% {
+    opacity: 1;
+    transform: translateY(-5px);
+  }
+}
+
+
+/* =========================================================
+   AGENT PIPELINE
+========================================================= */
+
+.agent-timeline {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 0;
+}
+
+.agent-timeline-item {
+  position: relative;
+
+  display: grid;
+
+  grid-template-columns:
+    30px
+    minmax(0, 1fr);
+
+  gap: 10px;
+
+  padding-bottom: 17px;
+}
+
+.agent-timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+.agent-timeline-item::before {
+  content: "";
+
+  position: absolute;
+
+  left: 13px;
+  top: 27px;
+
+  width: 2px;
+  height:
+    calc(100% - 7px);
+
+  background: #e2e8f0;
+}
+
+.agent-timeline-item:last-child::before {
+  display: none;
+}
+
+.agent-timeline-item.completed::before {
+  background:
+    linear-gradient(
+      180deg,
+      #22c55e,
+      #c7d2fe
+    );
+}
+
+.agent-timeline-marker {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 28px;
+  height: 28px;
+
+  border-radius: 50%;
+
+  color: #64748b;
+  background: #f8fafc;
+
+  border: 2px solid #cbd5e1;
+
+  font-size: 0.66rem;
+  font-weight: 800;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.agent-timeline-item.completed
+.agent-timeline-marker {
+  color: #ffffff;
+
+  background:
+    linear-gradient(
+      135deg,
+      #16a34a,
+      #22c55e
+    );
+
+  border-color: #22c55e;
+
+  box-shadow:
+    0 4px 12px
+    rgba(34, 197, 94, 0.18);
+}
+
+.agent-timeline-item:hover
+.agent-timeline-marker {
+  transform: scale(1.08);
+}
+
+.agent-timeline-item > div:last-child {
+  padding-top: 2px;
+}
+
+.agent-timeline-item strong {
+  display: block;
+
+  margin-bottom: 3px;
+
+  color: #1e293b;
+
+  font-size: 0.76rem;
+}
+
+.agent-timeline-item span {
+  display: block;
+
+  color: #64748b;
+
+  font-size: 0.67rem;
+  line-height: 1.4;
+
+  text-transform: capitalize;
+}
+
+
+/* =========================================================
+   CONFIDENCE SCORE
+========================================================= */
+
+.ai-score-section {
+  margin-top: 15px;
+}
+
+.ai-score-section.compact {
+  margin:
+    12px
+    0
+    5px;
+}
+
+.ai-score-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  margin-bottom: 7px;
+}
+
+.ai-score-header span {
+  color: #64748b;
+
+  font-size: 0.7rem;
+}
+
+.ai-score-header strong {
+  color: #4338ca;
+
+  font-size: 0.73rem;
+}
+
+.ai-progress-track {
+  position: relative;
+
+  width: 100%;
+  height: 7px;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  background: #eef2f7;
+}
+
+.ai-progress-fill {
+  height: 100%;
+
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      90deg,
+      #4f46e5,
+      #7c3aed
+    );
+
+  transition:
+    width 0.65s ease;
+
+  box-shadow:
+    0 0 10px
+    rgba(99, 102, 241, 0.25);
+}
+
+.ai-progress-fill.verification {
+  background:
+    linear-gradient(
+      90deg,
+      #0891b2,
+      #22c55e
+    );
+}
+
+
+/* =========================================================
+   RAG KNOWLEDGE SCORE
+========================================================= */
+
+.knowledge-score-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+
+  margin-top: 8px;
+}
+
+.knowledge-score-row span {
+  color: #64748b;
+
+  font-size: 0.65rem;
+}
+
+.knowledge-score-row b {
+  color: #334155;
+
+  font-size: 0.65rem;
+}
+
+.mini-progress-track {
+  width: 100%;
+  height: 5px;
+
+  margin-top: 4px;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  background: #e9eef6;
+}
+
+.mini-progress-fill {
+  height: 100%;
+
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      90deg,
+      #0891b2,
+      #4f46e5
+    );
+
+  transition:
+    width 0.6s ease;
+}
+
+.mini-progress-fill.quality {
+  background:
+    linear-gradient(
+      90deg,
+      #7c3aed,
+      #a855f7
+    );
+}
+
+
+/* =========================================================
+   TROUBLESHOOTING WRAPPER
+========================================================= */
+
+.troubleshooting-step-wrapper {
+  position: relative;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    auto;
+
+  align-items: stretch;
+
+  gap: 7px;
+}
+
+.troubleshooting-step-wrapper
+.troubleshooting-step {
+  margin: 0;
+}
+
+
+/* =========================================================
+   COPY BUTTON
+========================================================= */
+
+.copy-step-button {
+  align-self: center;
+
+  min-width: 54px;
+
+  padding: 7px 8px;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+
+  color: #475569;
+  background: #ffffff;
+
+  font-size: 0.64rem;
+  font-weight: 750;
+
+  cursor: pointer;
+
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.copy-step-button:hover {
+  color: #4338ca;
+
+  background: #eef2ff;
+
+  border-color: #c7d2fe;
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   AUTONOMY GATE
+========================================================= */
+
+.autonomy-gate-card {
+  position: relative;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #f8fbff
+    );
+
+  border-color: #dbeafe;
+}
+
+.autonomy-gate-card::before {
+  background:
+    linear-gradient(
+      180deg,
+      #2563eb,
+      #7c3aed
+    ) !important;
+}
+
+.autonomy-gate-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap: 9px;
+}
+
+.autonomy-gate-grid > div {
+  position: relative;
+
+  padding: 11px;
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    #e2e8f0;
+
+  border-radius: 10px;
+
+  background:
+    rgba(248, 250, 252, 0.9);
+}
+
+.autonomy-gate-grid span {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #64748b;
+
+  font-size: 0.66rem;
+}
+
+.autonomy-gate-grid strong {
+  display: block;
+
+  color: #1e293b;
+
+  font-size: 0.76rem;
+
+  text-transform: capitalize;
+}
+
+.autonomy-gate-grid > div::after {
+  content: "";
+
+  position: absolute;
+
+  right: -12px;
+  bottom: -12px;
+
+  width: 38px;
+  height: 38px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(79, 70, 229, 0.04);
+}
+
+
+/* =========================================================
+   SUCCESS CONSENSUS EFFECT
+========================================================= */
+
+.ai-status-badge.success {
+  animation:
+    successBadgeEnter
+    0.35s ease;
+}
+
+@keyframes successBadgeEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
+/* =========================================================
+   INTELLIGENCE CARD ENTER ANIMATION
+========================================================= */
+
+.ai-intelligence-panel
+.ai-result-card {
+  animation:
+    intelligenceCardEnter
+    0.3s ease both;
+}
+
+.ai-intelligence-panel
+.ai-result-card:nth-child(2) {
+  animation-delay: 0.04s;
+}
+
+.ai-intelligence-panel
+.ai-result-card:nth-child(3) {
+  animation-delay: 0.08s;
+}
+
+.ai-intelligence-panel
+.ai-result-card:nth-child(4) {
+  animation-delay: 0.12s;
+}
+
+.ai-intelligence-panel
+.ai-result-card:nth-child(5) {
+  animation-delay: 0.16s;
+}
+
+.ai-intelligence-panel
+.ai-result-card:nth-child(6) {
+  animation-delay: 0.2s;
+}
+
+@keyframes intelligenceCardEnter {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+}
+
+
+/* =========================================================
+   CHAT INPUT FOCUS GLOW
+========================================================= */
+
+.ai-chat-input:focus-within {
+  box-shadow:
+    0 -8px 25px
+    rgba(79, 70, 229, 0.035);
+}
+
+
+/* =========================================================
+   LOADING / DISABLED EXPERIENCE
+========================================================= */
+
+.ai-chat-input textarea:disabled {
+  cursor: wait;
+
+  background: #f8fafc;
+
+  opacity: 0.75;
+}
+
+.ai-chat-page
+.primary-button:disabled {
+  background:
+    linear-gradient(
+      135deg,
+      #94a3b8,
+      #cbd5e1
+    );
+
+  box-shadow: none;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 760px) {
+
+  .ai-live-status-row {
+    gap: 6px;
+  }
+
+  .ai-live-chip {
+    padding: 5px 8px;
+
+    font-size: 0.63rem;
+  }
+
+  .troubleshooting-step-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .copy-step-button {
+    justify-self: end;
+
+    min-width: 70px;
+  }
+
+  .autonomy-gate-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ai-typing-message {
+    min-width: 0;
+  }
+
+}
+
+
+/* =========================================================
+   DARK-SYSTEM COMPATIBILITY SAFETY
+   Keeps chat intentionally light inside existing UI
+========================================================= */
+
+.ai-chat-page {
+  color-scheme: light;
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+.copy-step-button:focus-visible {
+  outline:
+    3px solid
+    rgba(79, 70, 229, 0.2);
+
+  outline-offset: 2px;
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .ai-typing-row > span,
+  .ai-live-chip.online .ai-live-dot,
+  .ai-status-badge.success,
+  .ai-intelligence-panel .ai-result-card {
+    animation: none !important;
+  }
+
+  .ai-progress-fill,
+  .mini-progress-fill {
+    transition: none !important;
+  }
+}

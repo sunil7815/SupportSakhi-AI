@@ -16,19 +16,34 @@ import Tickets from "./pages/Tickets";
 import CreateTicket from "./pages/CreateTicket";
 import TicketDetails from "./pages/TicketDetails";
 import AdminDashboard from "./pages/AdminDashboard";
+import AIChat from "./pages/AIChat";
+
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
         <Routes>
+
           <Route
             path="/"
-            element={<Navigate to="/dashboard" replace />}
+            element={
+              <Navigate
+                to="/dashboard"
+                replace
+              />
+            }
           />
 
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route
+            path="/login"
+            element={<Login />}
+          />
+
+          <Route
+            path="/register"
+            element={<Register />}
+          />
 
           <Route
             element={
@@ -37,22 +52,54 @@ function App() {
               </ProtectedRoute>
             }
           >
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/tickets" element={<Tickets />} />
-            <Route path="/tickets/create" element={<CreateTicket />} />
-            <Route path="/tickets/:ticketId" element={<TicketDetails />} />
-            <Route path="/admin" element={<AdminDashboard />} />
+
+            <Route
+              path="/dashboard"
+              element={<Dashboard />}
+            />
+
+            <Route
+              path="/tickets"
+              element={<Tickets />}
+            />
+
+            <Route
+              path="/tickets/create"
+              element={<CreateTicket />}
+            />
+
+            <Route
+              path="/tickets/:ticketId"
+              element={<TicketDetails />}
+            />
+
+            <Route
+              path="/ai-chat"
+              element={<AIChat />}
+            />
+
+            <Route
+              path="/admin"
+              element={<AdminDashboard />}
+            />
+
           </Route>
 
           <Route
             path="*"
-            element={<Navigate to="/" replace />}
+            element={
+              <Navigate
+                to="/"
+                replace
+              />
+            }
           />
+
         </Routes>
       </AuthProvider>
     </BrowserRouter>
   );
 }
 
-export default App;
 
+export default App;

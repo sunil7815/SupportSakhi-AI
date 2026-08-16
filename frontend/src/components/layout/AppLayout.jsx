@@ -13,8 +13,12 @@ function AppLayout() {
   return (
     <div className="app-shell">
       <aside className="sidebar">
+
+        {/* Brand */}
         <div className="sidebar-brand">
-          <div className="sidebar-logo">S</div>
+          <div className="sidebar-logo">
+            S
+          </div>
 
           <div>
             <h2>SupportSakhi</h2>
@@ -22,7 +26,10 @@ function AppLayout() {
           </div>
         </div>
 
+
+        {/* Navigation */}
         <nav className="sidebar-nav">
+
           <NavLink to="/dashboard">
             Dashboard
           </NavLink>
@@ -35,48 +42,76 @@ function AppLayout() {
             Create Ticket
           </NavLink>
 
+          <NavLink to="/ai-chat">
+            AI Support Chat
+          </NavLink>
+
           {user?.role === "admin" && (
             <NavLink to="/admin">
               Admin Dashboard
             </NavLink>
           )}
+
         </nav>
 
+
+        {/* User Section */}
         <div className="sidebar-user">
+
           <div className="user-avatar">
-            {user?.name?.charAt(0)?.toUpperCase() || "U"}
+            {user?.name
+              ?.charAt(0)
+              ?.toUpperCase() || "U"}
           </div>
 
           <div className="sidebar-user-info">
-            <strong>{user?.name}</strong>
-            <span>{user?.role}</span>
+            <strong>
+              {user?.name || "User"}
+            </strong>
+
+            <span>
+              {user?.role || "user"}
+            </span>
           </div>
 
           <button
+            type="button"
             className="sidebar-logout"
             onClick={handleLogout}
           >
             Logout
           </button>
+
         </div>
+
       </aside>
 
+
+      {/* Main Content */}
       <div className="app-main">
+
         <header className="topbar">
+
           <div>
             <h3>SupportSakhi AI</h3>
-            <p>Intelligent IT support workspace</p>
+
+            <p>
+              Intelligent IT support workspace
+            </p>
           </div>
 
           <div className="topbar-status">
-            <span className="status-dot"></span>
+            <span className="status-dot" />
             Backend Connected
           </div>
+
         </header>
+
 
         <main className="page-content">
           <Outlet />
         </main>
+
       </div>
     </div>
   );
