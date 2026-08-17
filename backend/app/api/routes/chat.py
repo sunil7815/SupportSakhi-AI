@@ -14,6 +14,10 @@ from app.db.database import get_db
 from app.db.models.ticket import Ticket
 from app.db.models.user import User
 
+from app.services.self_learning_service import (
+    create_resolution_knowledge_draft,
+)
+
 from app.services.resolution_memory_service import (
     filter_failed_steps,
     get_memory_summary,
@@ -775,10 +779,70 @@ def confirm_ticket_resolution(
         current_user=current_user,
     )
 
+    # ========================================================
+    # NORMALIZE ATTEMPTED TROUBLESHOOTING STEPS
+    # ========================================================
+
+    attempted_steps = [
+        step.strip()
+        for step in data.attempted_steps
+        if isinstance(step, str)
+        and step.strip()
+    ]
+
+    # ========================================================
+    # BUILD RESOLUTION-CONFIRMATION CONTEXT
+    # ========================================================
+
+    confirmation_context: list[str] = [
+        ticket.description
+        or ticket.title
+    ]
+
+    if attempted_steps:
+        confirmation_context.append(
+            "Troubleshooting steps actually attempted "
+            "by the user:\n"
+            + "\n".join(
+                f"- {step}"
+                for step in attempted_steps
+            )
+        )
+
+    if data.resolved:
+        confirmation_context.append(
+            "The user confirmed that the issue was "
+            "resolved after performing the attempted "
+            "troubleshooting steps above."
+        )
+    else:
+        confirmation_context.append(
+            "The user confirmed that the issue is "
+            "still not resolved after performing the "
+            "attempted troubleshooting steps above."
+        )
+
+        if (
+            data.failure_reason
+            and data.failure_reason.strip()
+        ):
+            confirmation_context.append(
+                "Failure reason: "
+                + data.failure_reason.strip()
+            )
+
+    confirmation_description = "\n\n".join(
+        confirmation_context
+    )
+
+    # ========================================================
+    # RE-RUN AGENTS WITH ACTUAL RESOLUTION EVIDENCE
+    # ========================================================
+
     pipeline = run_memory_aware_agent(
         db=db,
         title=ticket.title,
-        description=ticket.description,
+        description=confirmation_description,
         ticket_id=ticket.id,
     )
 
@@ -859,13 +923,6 @@ def confirm_ticket_resolution(
             "auto_resolution_allowed"
         ]
     )
-
-    attempted_steps = [
-        step.strip()
-        for step
-        in data.attempted_steps
-        if step.strip()
-    ]
 
     # ========================================================
     # USER CONFIRMED ISSUE SOLVED
@@ -1153,6 +1210,27 @@ def confirm_ticket_resolution(
         db.commit()
         db.refresh(ticket)
 
+        # ----------------------------------------------------
+        # SELF-LEARNING KNOWLEDGE DRAFT
+        # ----------------------------------------------------
+
+        knowledge_draft = (
+            create_resolution_knowledge_draft(
+                db=db,
+                ticket_id=ticket.id,
+                title=ticket.title,
+                problem_text=(
+                    ticket.description
+                    or ticket.title
+                ),
+                successful_steps=(
+                    attempted_steps
+                ),
+                category=category,
+                confidence=confidence,
+            )
+        )
+
         return {
             "ticket_id": (
                 ticket.id
@@ -1174,6 +1252,22 @@ def confirm_ticket_resolution(
 
             "successful_steps": (
                 attempted_steps
+            ),
+
+            "knowledge_draft_created": (
+                knowledge_draft is not None
+            ),
+
+            "knowledge_draft_id": (
+                knowledge_draft.id
+                if knowledge_draft
+                else None
+            ),
+
+            "knowledge_draft_approved": (
+                knowledge_draft.is_approved
+                if knowledge_draft
+                else False
             ),
 
             "proof_created": True,
